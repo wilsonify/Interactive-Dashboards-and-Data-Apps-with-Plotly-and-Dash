@@ -1,0 +1,5 @@
+setup.py
+parquet_table.egg-info/PKG-INFO
+parquet_table.egg-info/SOURCES.txt
+parquet_table.egg-info/dependency_links.txt
+parquet_table.egg-info/top_level.txt
