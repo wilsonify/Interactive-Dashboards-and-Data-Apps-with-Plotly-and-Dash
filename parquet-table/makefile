@@ -48,8 +48,5 @@ dist/__main__/__main__:
 --distpath dist \
 __main__.spec
 
-dist/__main__/data:
-	cp -r data dist/__main__/data
-
-dist/__main__/site-packages:
-	cp -r /home/thom/repos/venvs/plotly-dash/lib/python3.8/site-packages/* dist/__main__
+run: dist/__main__/__main__
+	cd dist/__main__ && ./__main__
