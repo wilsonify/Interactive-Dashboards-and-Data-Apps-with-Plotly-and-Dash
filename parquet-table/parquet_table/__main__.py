@@ -2,7 +2,7 @@ from parquet_table.app import app
 
 
 def main():
-    app.run_server(debug=True)
+    app.run_server(debug=False)
 
 
 if __name__ == "__main__":
