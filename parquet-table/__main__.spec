@@ -1,14 +1,14 @@
 # -*- mode: python ; coding: utf-8 -*-
-
+import site
+site_pkgs = site.getsitepackages()[0]
 
 block_cipher = None
-
 
 a = Analysis(['parquet_table/__main__.py'],
              pathex=['parquet_table'],
              binaries=[],
              datas=[],
-             hiddenimports=['dash_core_components','dash_html_components','dash_renderer'],
+             hiddenimports=[],
              hookspath=[],
              hooksconfig={},
              runtime_hooks=[],
@@ -17,6 +17,11 @@ a = Analysis(['parquet_table/__main__.py'],
              win_private_assemblies=False,
              cipher=block_cipher,
              noarchive=False)
+
+a.datas += Tree("data",prefix="data")
+a.datas += Tree(f"{site_pkgs}/dash_core_components", prefix="dash_core_components")
+a.datas += Tree(f"{site_pkgs}/dash_html_components", prefix="dash_html_components")
+a.datas += Tree(f"{site_pkgs}/dash_renderer", prefix="dash_renderer")
 
 pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
 
