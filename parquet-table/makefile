@@ -24,9 +24,6 @@ build/electron-v15.2.0-linux-x64/resources/parquet-table.asar: build/electron-v1
 /web/node_modules:
 	cd web && npm install
 
-app.asar: /web/node_modules
-	asar pack web app.asar
-
 build/electron-v15.2.0-linux-x64/resources/parquet-table.asar: app.asar
 	cp app.asar build/electron-v15.2.0-linux-x64/resources
 
@@ -50,3 +47,9 @@ __main__.spec
 
 run: dist/__main__/__main__
 	cd dist/__main__ && ./__main__
+
+web/__main__/__main__: dist/__main__/__main__
+	cp -r dist/__main__ web
+
+app.asar: /web/node_modules web/__main__/__main__
+	asar pack web app.asar
