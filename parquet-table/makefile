@@ -16,16 +16,13 @@ build/electron-v15.2.0-linux-x64.zip: build_dir electron-v15.2.0-linux-x64.zip
 	cp electron-v15.2.0-linux-x64.zip build
 
 build/electron-v15.2.0-linux-x64: build_dir build/electron-v15.2.0-linux-x64.zip
-	cd build && unzip electron-v15.2.0-linux-x64.zip -d electron-v15.2.0-linux-x64
+	cd build && unzip -u electron-v15.2.0-linux-x64.zip -d electron-v15.2.0-linux-x64
 
-build/electron-v15.2.0-linux-x64/resources/parquet-table.asar: build/electron-v15.2.0-linux-x64
-	asar pack main.js
+build/web:
+	cp -r web build
 
-/web/node_modules:
-	cd web && npm install
-
-build/electron-v15.2.0-linux-x64/resources/parquet-table.asar: app.asar
-	cp app.asar build/electron-v15.2.0-linux-x64/resources
+build/web/node_modules: build/web
+	cd build/web && npm install
 
 __main__.spec:
 	pyinstaller \
@@ -45,11 +42,17 @@ dist/__main__/__main__:
 --distpath dist \
 __main__.spec
 
-run: dist/__main__/__main__
+serve: dist/__main__/__main__
 	cd dist/__main__ && ./__main__
 
-web/__main__/__main__: dist/__main__/__main__
-	cp -r dist/__main__ web
+build/web/__main__/__main__: build/web dist/__main__/__main__
+	cp -r dist/__main__ build/web
 
-app.asar: /web/node_modules web/__main__/__main__
-	asar pack web app.asar
+build/app.asar: build/web/node_modules build/web/__main__/__main__
+	cd build && asar pack web app.asar
+
+build/electron-v15.2.0-linux-x64/resources/app.asar: build/electron-v15.2.0-linux-x64 build/app.asar
+	cp build/app.asar build/electron-v15.2.0-linux-x64/resources
+
+run: build/electron-v15.2.0-linux-x64/resources/app.asar
+	cd build/electron-v15.2.0-linux-x64 && ./electron
