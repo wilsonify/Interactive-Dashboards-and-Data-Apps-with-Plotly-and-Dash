@@ -4,13 +4,13 @@ import re
 
 import dash
 import dash_bootstrap_components as dbc
-import dash_core_components as dcc
-import dash_html_components as html
+from dash import dcc
+from dash import html
 import pandas as pd
 import plotly.express as px
 from dash.dependencies import Output, Input
 from dash.exceptions import PreventUpdate
-from dash_table import DataTable
+from dash.dash_table import DataTable
 
 from parquet_table import cividis0
 from parquet_table import gini, regions

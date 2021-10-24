@@ -4,10 +4,9 @@ import io
 
 import dash
 from dash.dependencies import Input, Output, State
-import dash_core_components as dcc
-import dash_html_components as html
-import dash_table
-
+from dash import dcc
+from dash import html
+from dash.dash_table import DataTable
 import pandas as pd
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
@@ -59,7 +58,7 @@ def parse_contents(contents, filename, date):
         html.H5(filename),
         html.H6(datetime.datetime.fromtimestamp(date)),
 
-        dash_table.DataTable(
+        DataTable(
             data=df.to_dict('records'),
             columns=[{'name': i, 'id': i} for i in df.columns]
         ),
