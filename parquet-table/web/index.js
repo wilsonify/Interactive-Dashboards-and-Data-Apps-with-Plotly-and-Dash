@@ -1,6 +1,8 @@
 const { app, BrowserWindow } = require('electron');
 const { is, setContentSecurityPolicy } = require('electron-util');
 const config = require('./config');
+var spawn = require("child_process").spawn;
+var exec = require('child_process').execFile;
 
 // to avoid garbage collection, declare the window as a variable
 let window;
@@ -14,12 +16,17 @@ function createWindow() {
       nodeIntegration: false
     }
   });
-  // spawn the python dash app
-  var spawn = require("child_process").spawn;
-  var process = spawn("__main__/__main__.py"]);
 
+  console.log("start dash app");
+  exec( '__main__/__main__', [],
+     function(err, data) { console.log(err); console.log(data.toString()); }
+  );
+  //setTimeout(function(){ console.log("started dash app") }, 500);
+  
   // load the URL
   window.loadURL(config.LOCAL_WEB_URL);
+  //while(!window.webContents.isLoadingMainFrame()) { console.log("waiting for loading"); }
+
 
   // set the CSP in production mode
   // a CSP allows us to limit the domains that our application has permission to load resources from.
