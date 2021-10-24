@@ -19,9 +19,7 @@ a = Analysis(['parquet_table/__main__.py'],
              noarchive=False)
 
 a.datas += Tree("data",prefix="data")
-a.datas += Tree(f"{site_pkgs}/dash_core_components", prefix="dash_core_components")
-a.datas += Tree(f"{site_pkgs}/dash_html_components", prefix="dash_html_components")
-a.datas += Tree(f"{site_pkgs}/dash_renderer", prefix="dash_renderer")
+a.datas += Tree(f"{site_pkgs}/dash", prefix="dash")
 
 pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
 
