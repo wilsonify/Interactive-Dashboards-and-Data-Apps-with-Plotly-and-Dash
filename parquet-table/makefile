@@ -1,4 +1,8 @@
 
+build_deps:
+	npm install -g electron-builder
+	npm install -g asar
+
 build_dir:
 	mkdir -p build
 
@@ -24,7 +28,7 @@ build/web:
 build/web/node_modules: build/web
 	cd build/web && npm install
 
-__main__.spec:
+__main__.spec: build_dir dist_dir
 	pyinstaller \
 --noconfirm \
 --onedir \
@@ -33,7 +37,7 @@ __main__.spec:
 --distpath dist \
 parquet_table/__main__.py
 
-dist/__main__/__main__:
+dist/__main__/__main__: build_dir dist_dir
 	pyinstaller \
 --noconfirm \
 --onedir \
@@ -54,5 +58,14 @@ build/app.asar: build/web/node_modules build/web/__main__/__main__
 build/electron-v15.2.0-linux-x64/resources/app.asar: build/electron-v15.2.0-linux-x64 build/app.asar
 	cp build/app.asar build/electron-v15.2.0-linux-x64/resources
 
+dist/app.asar: build/app.asar
+	cp build/app.asar dist
+
 run: build/electron-v15.2.0-linux-x64/resources/app.asar
 	cd build/electron-v15.2.0-linux-x64 && ./electron
+
+build/web/dist/parquet-table-desktop-0.1.0.AppImage: build/app.asar
+	cd build/web && sudo electron-builder
+
+dist/parquet-table-desktop-0.1.0.AppImage: build/web/dist/parquet-table-desktop-0.1.0.AppImage
+	cp build/web/dist/parquet-table-desktop-0.1.0.AppImage dist

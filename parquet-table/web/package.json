@@ -2,6 +2,8 @@
   "name": "parquet-table-desktop",
   "version": "0.1.0",
   "description": "An Electron app for viewing parquet files",
+  "win": {"iconUrl":" https://github.com/paulbjensen/lorikeet/raw/master/icon.ico" },
+  "linux": {"icon":" https://github.com/paulbjensen/lorikeet/raw/master/icon.svg" },
   "main": "index.js",
   "scripts": {
     "start": "electron index.js",
@@ -20,7 +22,7 @@
   },
   "homepage": "https://wilsonify.github.io/projects",
   "devDependencies": {
-    "electron": "6.0.0",
+    "electron": "^6.0.0",
     "electron-builder": "21.2.0",
     "eslint": "6.1.0",
     "eslint-config-prettier": "6.0.0",
