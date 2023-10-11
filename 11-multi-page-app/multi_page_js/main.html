@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <ul class="navbar-menu">
+            <li class="navbar-item dropdown">
+                <a href="#" class="navbar-link">Select country</a>
+                <div class="dropdown-menu">
+                    <a href="#" class="dropdown-item">Country 1</a>
+                    <a href="#" class="dropdown-item">Country 2</a>
+                    <!-- Add more countries as needed -->
+                </div>
+            </li>
+        </ul>
+    </nav>
+    <div class="content">
+        <div id="main-content"></div>
+        <br>
+        <div class="row">
+            <div class="col-lg-1"></div>
+            <div class="col">
+                <div class="tabs">
+                    <ul class="tab-menu">
+                        <li class="tab-item" data-tab="key-facts">Key Facts</li>
+                        <li class="tab-item" data-tab="project-info">Project Info</li>
+                    </ul>
+                    <div class="tab-content" id="key-facts">
+                        <ul>
+                            <li>Number of Economies: 170</li>
+                            <li>Temporal Coverage: 1974 - 2019</li>
+                            <li>Update Frequency: Quarterly</li>
+                            <li>Last Updated: March 18, 2020</li>
+                            <li>Source: <a href="https://datacatalog.worldbank.org/dataset/poverty-and-equity-database">https://datacatalog.worldbank.org/dataset/poverty-and-equity-database</a></li>
+                        </ul>
+                    </div>
+                    <div class="tab-content" id="project-info">
+                        <ul>
+                            <li>Book title: Interactive Dashboards and Data Apps with Plotly and Dash</li>
+                            <li>GitHub repo: <a href="https://github.com/PacktPublishing/Interactive-Dashboards-and-Data-Apps-with-Plotly-and-Dash">https://github.com/PacktPublishing/Interactive-Dashboards-and-Data-Apps-with-Plotly-and-Dash</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
