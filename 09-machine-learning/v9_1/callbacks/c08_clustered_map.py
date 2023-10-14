@@ -18,8 +18,7 @@ def clustered_map(year, n_clusters, indicators):
         raise PreventUpdate
     imp = SimpleImputer(missing_values=np.nan, strategy='mean')
     scaler = StandardScaler()
-    kmeans = KMeans(n_clusters=n_clusters)
-
+    kmeans = KMeans(n_clusters=n_clusters, n_init=10)
     df = poverty[poverty['is_country'] & poverty['year'].eq(year)][indicators + ['Country Name', 'year']]
     data = df[indicators]
     if df.isna().all().any():
