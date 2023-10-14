@@ -2,18 +2,23 @@ import re
 from typing import Collection
 
 import dash
-import dash_html_components as html
-import dash_core_components as dcc
+from dash import html
+from dash import dcc
 import dash_bootstrap_components as dbc
-from dash.dependencies import Output, Input
+from dash.dependencies import Output, Input, State
 from dash.exceptions import PreventUpdate
+from dash_table import DataTable
 import plotly.graph_objects as go
 import plotly.express as px
 import pandas as pd
+import numpy as np
+from sklearn.cluster import KMeans
+from sklearn.preprocessing import StandardScaler
+from sklearn.impute import SimpleImputer
 
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.COSMO])
-
+server = app.server
 
 poverty_data = pd.read_csv('../data/PovStatsData.csv')
 poverty = pd.read_csv('../data/poverty.csv', low_memory=False)
@@ -79,17 +84,105 @@ app.layout = html.Div([
     dbc.Row([
         dbc.Col(lg=2),
         dbc.Col([
-            dcc.Dropdown(id='indicator_dropdown',
-                        value='GINI index (World Bank estimate)',
-                        options=[{'label': indicator, 'value': indicator}
-                                for indicator in poverty.columns[3:54]]),
-            dcc.Graph(id='indicator_map_chart'),
-            dcc.Markdown(id='indicator_map_details_md',
-                        style={'backgroundColor': '#E5ECF6'})
-
+            dbc.Tabs([
+                dbc.Tab([
+                    html.Br(),
+                    dcc.Dropdown(id='indicator_dropdown',
+                                 value='GINI index (World Bank estimate)',
+                                 options=[{'label': indicator,
+                                 'value': indicator} 
+                                 for indicator in poverty.columns[3:54]]),
+                    dcc.Graph(id='indicator_map_chart'),
+                    dcc.Markdown(id='indicator_map_details_md',
+                                style={'backgroundColor': '#E5ECF6'})
+                ], label='Explore Metrics'),
+                dbc.Tab([
+                    html.Br(),
+                    dbc.Row([
+                        dbc.Col(lg=1),
+                        dbc.Col([
+                            dbc.Label('Select the year:'),
+                            dcc.Slider(id='year_cluster_slider',
+                                    min=1974, max=2018, step=1, included=False,
+                                    value=2018,
+                                    marks={year: str(year)
+                                            for year in range(1974, 2019, 5)})
+                        ], lg=6, md=12),
+                        dbc.Col([
+                            dbc.Label('Select the number of clusters:'),
+                            dcc.Slider(id='ncluster_cluster_slider',
+                                    min=2, max=15, step=1, included=False,
+                                    value=4,
+                                    marks={n: str(n) for n in range(2, 16)}),
+                        ], lg=4, md=12)
+                    ]),
+                    html.Br(),
+                    dbc.Row([
+                        dbc.Col(lg=1),
+                        dbc.Col([
+                            dbc.Label('Select Indicators:'),
+                            dcc.Dropdown(id='cluster_indicator_dropdown',optionHeight=40,
+                                        multi=True,
+                                        value=['GINI index (World Bank estimate)'],
+                                        options=[{'label': indicator, 'value': indicator}
+                                                for indicator in poverty.columns[3:54]]),
+                        ], lg=6),
+                        dbc.Col([            
+                            dbc.Label(''),html.Br(),
+                            dbc.Button("Submit", id='clustering_submit_button'),
+                        ]),
+                    ]),
+                    dcc.Loading([
+                        dcc.Graph(id='clustered_map_chart')
+                    ])
+                ], label='Cluster Countries'),
+            ]),
         ], lg=8)
     ]),
     html.Br(),
+        html.Br(),
+        html.Hr(),
+    dbc.Row([
+        dbc.Col(lg=2),
+        dbc.Col([
+            dbc.Label('Indicator:'),
+            dcc.Dropdown(id='hist_indicator_dropdown',optionHeight=40,
+                         value='GINI index (World Bank estimate)',
+                         options=[{'label': indicator, 'value': indicator}
+                                  for indicator in poverty.columns[3:54]]),
+        ], lg=5),
+        dbc.Col([
+            dbc.Label('Years:'),
+            dcc.Dropdown(id='hist_multi_year_selector',
+                         multi=True,
+                         value=[2015],
+                         placeholder='Select one or more years',
+                         options=[{'label': year, 'value': year}
+                                  for year in poverty['year'].drop_duplicates().sort_values()]),
+        ], lg=3),
+    ]),
+    html.Br(),
+    dbc.Row([
+        dbc.Col(lg=2),
+        dbc.Col([
+            html.Br(),
+            dbc.Label('Modify number of bins:'),
+            dcc.Slider(id='hist_bins_slider', 
+                       dots=True, min=0, max=100, step=5, included=False,
+                       marks={x: str(x) for x in range(0, 105, 5)}),
+            dcc.Graph(id='indicator_year_histogram',figure=make_empty_fig()),                       
+        ], lg=8)
+        
+    ]),
+    
+    dbc.Row([
+        dbc.Col(lg=2),
+        dbc.Col([
+            html.Div(id='table_histogram_output'),
+            html.Br(), html.Br(),
+        ], lg=8)
+    ]),
+
     html.H2('Gini Index - World Bank Data', style={'textAlign': 'center'}),
     html.Br(),
     dbc.Row([
@@ -117,7 +210,7 @@ app.layout = html.Div([
         ], md=12, lg=5),
     ]),
     dbc.Row([
-        dbc.Col(lg=1),
+        dbc.Col(lg=2),
         dbc.Col([
             html.Br(),
             html.H2('Income Share Distribution', style={'textAlign': 'center'}),
@@ -129,8 +222,7 @@ app.layout = html.Div([
                                   for country in income_share_df['Country Name'].unique()]),
             dcc.Graph(id='income_share_country_barchart',
                      figure=make_empty_fig())
-        ], lg=10)
-
+        ], lg=8)
     ]),
     html.Br(),
     html.H2('Poverty Gap at $1.9, $3.2, and $5.5 (% of population)',
@@ -172,7 +264,6 @@ app.layout = html.Div([
                       figure=make_empty_fig())
         ], lg=10)
     ]),
-
     dbc.Tabs([
        dbc.Tab([
            html.Ul([
@@ -187,7 +278,6 @@ app.layout = html.Div([
                           href='https://datacatalog.worldbank.org/dataset/poverty-and-equity-database')
                ])
            ])
-
        ], label='Key Facts'),
         dbc.Tab([
             html.Ul([
@@ -198,11 +288,11 @@ app.layout = html.Div([
                                 href='https://github.com/PacktPublishing/Interactive-Dashboards-and-Data-Apps-with-Plotly-and-Dash')
                          ])
             ])
-        ], label='Project Info')
+        ], label='Poject Info')
     ]),
 ], style={'backgroundColor': '#E5ECF6'})
 
-@app.callback(Output('indicator_map_chart', 'figure'),
+@callback(Output('indicator_map_chart', 'figure'),
               Output('indicator_map_details_md', 'children'),
               Input('indicator_dropdown', 'value'))
 def display_generic_map_chart(indicator):
@@ -250,7 +340,7 @@ def display_generic_map_chart(indicator):
     return fig, markdown
 
 
-@app.callback(Output('gini_year_barchart', 'figure'),
+@callback(Output('gini_year_barchart', 'figure'),
               Input('gini_year_dropdown', 'value'))
 def plot_gini_year_barchart(year):
     if not year:
@@ -268,7 +358,7 @@ def plot_gini_year_barchart(year):
     return fig
 
 
-@app.callback(Output('gini_country_barchart', 'figure'), Input('gini_country_dropdown', 'value'))
+@callback(Output('gini_country_barchart', 'figure'), Input('gini_country_dropdown', 'value'))
 def plot_gini_country_barchart(countries):
     if not countries:
         raise PreventUpdate
@@ -285,7 +375,7 @@ def plot_gini_country_barchart(countries):
     return fig
 
 
-@app.callback(Output('income_share_country_barchart', 'figure'), Input('income_share_country_dropdown', 'value'))
+@callback(Output('income_share_country_barchart', 'figure'), Input('income_share_country_dropdown', 'value'))
 def plot_income_share_barchart(country):
     if country is None:
         raise PreventUpdate
@@ -296,8 +386,7 @@ def plot_income_share_barchart(country):
                  height=600, 
                  hover_name='Country Name',
                  title=f'Income Share Quintiles - {country}',
-                 orientation='h',
-                 )
+                 orientation='h')
     fig.layout.legend.title = None
     fig.layout.legend.orientation = 'h'
     fig.layout.legend.x = 0.2
@@ -307,7 +396,7 @@ def plot_income_share_barchart(country):
     fig.layout.plot_bgcolor = '#E5ECF6'
     return fig
 
-@app.callback(Output('perc_pov_scatter_chart', 'figure'),
+@callback(Output('perc_pov_scatter_chart', 'figure'),
               Input('perc_pov_year_slider', 'value'),
               Input('perc_pov_indicator_slider', 'value'))
 def plot_perc_pov_chart(year, indicator):
@@ -332,6 +421,83 @@ def plot_perc_pov_chart(year, indicator):
     fig.layout.paper_bgcolor = '#E5ECF6'
     fig.layout.xaxis.ticksuffix = '%'
     return fig
+
+@callback(Output('indicator_year_histogram', 'figure'),
+              Output('table_histogram_output', 'children'),
+              Input('hist_multi_year_selector', 'value'),
+              Input('hist_indicator_dropdown', 'value'),
+              Input('hist_bins_slider', 'value'))
+def display_histogram(years, indicator, nbins):
+    if (not years) or (not indicator):
+        raise PreventUpdate
+    df = poverty[poverty['year'].isin(years) & poverty['is_country']]
+    fig = px.histogram(df, x=indicator, facet_col='year', color='year', 
+                       title=indicator + ' Histogram',
+                       nbins=nbins,
+                       facet_col_wrap=4, height=700)
+    fig.for_each_xaxis(lambda axis: axis.update(title=''))
+    fig.add_annotation(text=indicator, x=0.5, y=-0.12, xref='paper', yref='paper', showarrow=False)
+    fig.layout.paper_bgcolor = '#E5ECF6'
+
+    table = DataTable(columns = [{'name': col, 'id': col} 
+                                 for col in df[['Country Name', 'year', indicator]].columns],
+                      data = df[['Country Name', 'year', indicator]].to_dict('records'),
+                      style_header={'whiteSpace': 'normal'},
+                      fixed_rows={'headers': True},
+                      virtualization=True,
+                      style_table={'height': '400px'},
+                      sort_action='native',
+                      filter_action='native',
+                      export_format='csv',
+                      style_cell={'minWidth': '150px'}),
+    return fig, table
+
+
+@callback(Output('clustered_map_chart', 'figure'),
+              Input('clustering_submit_button', 'n_clicks'),
+              State('year_cluster_slider', 'value'),
+              State('ncluster_cluster_slider', 'value'),
+              State('cluster_indicator_dropdown', 'value'))
+def clustered_map(n_clicks, year, n_clusters, indicators):
+    if not indicators:
+        raise PreventUpdate
+    imp = SimpleImputer(missing_values=np.nan, strategy='mean')
+    scaler = StandardScaler()
+    kmeans = KMeans(n_clusters=n_clusters)
+    
+    df = poverty[poverty['is_country'] & poverty['year'].eq(year)][indicators + ['Country Name', 'year']]
+    data = df[indicators]
+    if df.isna().all().any():
+        return px.scatter(title='No available data for the selected combination of year/indicators.')
+    data_no_na = imp.fit_transform(data)
+    scaled_data = scaler.fit_transform(data_no_na)
+    kmeans.fit(scaled_data)
+
+    fig = px.choropleth(df,
+                        locations='Country Name',
+                        locationmode='country names',
+                        color=[str(x) for x in  kmeans.labels_], 
+                        labels={'color': 'Cluster'},
+                        hover_data=indicators,
+                        height=650,
+                        title=f'Country clusters - {year}. Number of clusters: {n_clusters}<br>Inertia: {kmeans.inertia_:,.2f}',
+                        color_discrete_sequence=px.colors.qualitative.T10)
+    fig.add_annotation(x=-0.1, y=-0.15, 
+                       xref='paper', yref='paper',
+                       text='Indicators:<br>' + "<br>".join(indicators), 
+                       showarrow=False)
+    fig.layout.geo.showframe = False
+    fig.layout.geo.showcountries = True
+    fig.layout.geo.projection.type = 'natural earth'
+    fig.layout.geo.lataxis.range = [-53, 76]
+    fig.layout.geo.lonaxis.range = [-137, 168]
+    fig.layout.geo.landcolor = 'white'
+    fig.layout.geo.bgcolor = '#E5ECF6'
+    fig.layout.paper_bgcolor = '#E5ECF6'
+    fig.layout.geo.countrycolor = 'gray'
+    fig.layout.geo.coastlinecolor = 'gray'
+    return fig
+    
 
 if __name__ == '__main__':
     app.run_server(debug=True)

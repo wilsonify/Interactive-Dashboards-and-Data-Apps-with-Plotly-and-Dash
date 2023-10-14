@@ -2,8 +2,8 @@ import re
 from typing import Collection
 
 import dash
-import dash_html_components as html
-import dash_core_components as dcc
+from dash import html
+from dash import dcc
 import dash_bootstrap_components as dbc
 from dash.dependencies import Output, Input
 from dash.exceptions import PreventUpdate
@@ -16,9 +16,9 @@ import pandas as pd
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.COSMO])
 
 
-poverty_data = pd.read_csv('../data/PovStatsData.csv')
-poverty = pd.read_csv('../data/poverty.csv', low_memory=False)
-series = pd.read_csv('../data/PovStatsSeries.csv')
+poverty_data = pd.read_csv('../../data/PovStatsData.csv')
+poverty = pd.read_csv('../../data/poverty.csv', low_memory=False)
+series = pd.read_csv('../../data/PovStatsSeries.csv')
 
 gini = 'GINI index (World Bank estimate)'
 gini_df = poverty[poverty[gini].notna()]
@@ -243,7 +243,7 @@ app.layout = html.Div([
     ]),
 ], style={'backgroundColor': '#E5ECF6'})
 
-@app.callback(Output('indicator_map_chart', 'figure'),
+@callback(Output('indicator_map_chart', 'figure'),
               Output('indicator_map_details_md', 'children'),
               Input('indicator_dropdown', 'value'))
 def display_generic_map_chart(indicator):
@@ -291,7 +291,7 @@ def display_generic_map_chart(indicator):
     return fig, markdown
 
 
-@app.callback(Output('gini_year_barchart', 'figure'),
+@callback(Output('gini_year_barchart', 'figure'),
               Input('gini_year_dropdown', 'value'))
 def plot_gini_year_barchart(year):
     if not year:
@@ -309,7 +309,7 @@ def plot_gini_year_barchart(year):
     return fig
 
 
-@app.callback(Output('gini_country_barchart', 'figure'), Input('gini_country_dropdown', 'value'))
+@callback(Output('gini_country_barchart', 'figure'), Input('gini_country_dropdown', 'value'))
 def plot_gini_country_barchart(countries):
     if not countries:
         raise PreventUpdate
@@ -326,7 +326,7 @@ def plot_gini_country_barchart(countries):
     return fig
 
 
-@app.callback(Output('income_share_country_barchart', 'figure'), Input('income_share_country_dropdown', 'value'))
+@callback(Output('income_share_country_barchart', 'figure'), Input('income_share_country_dropdown', 'value'))
 def plot_income_share_barchart(country):
     if country is None:
         raise PreventUpdate
@@ -348,7 +348,7 @@ def plot_income_share_barchart(country):
     fig.layout.plot_bgcolor = '#E5ECF6'
     return fig
 
-@app.callback(Output('perc_pov_scatter_chart', 'figure'),
+@callback(Output('perc_pov_scatter_chart', 'figure'),
               Input('perc_pov_year_slider', 'value'),
               Input('perc_pov_indicator_slider', 'value'))
 def plot_perc_pov_chart(year, indicator):
@@ -374,7 +374,7 @@ def plot_perc_pov_chart(year, indicator):
     fig.layout.xaxis.ticksuffix = '%'
     return fig
 
-@app.callback(Output('indicator_year_histogram', 'figure'),
+@callback(Output('indicator_year_histogram', 'figure'),
               Output('table_histogram_output', 'children'),
               Input('hist_multi_year_selector', 'value'),
               Input('hist_indicator_dropdown', 'value'),

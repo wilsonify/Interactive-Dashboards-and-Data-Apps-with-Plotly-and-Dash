@@ -73,7 +73,7 @@ def parse_contents(contents, filename, date):
         })
     ])
 
-@app.callback(Output('output-data-upload', 'children'),
+@callback(Output('output-data-upload', 'children'),
               Input('upload-data', 'contents'),
               State('upload-data', 'filename'),
               State('upload-data', 'last_modified'))

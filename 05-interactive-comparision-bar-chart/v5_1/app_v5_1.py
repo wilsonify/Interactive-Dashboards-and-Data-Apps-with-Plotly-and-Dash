@@ -1,7 +1,8 @@
 import dash
-import dash_html_components as html
-import dash_core_components as dcc
+from dash import html
+from dash import dcc
 import dash_bootstrap_components as dbc
+from dash import callback
 from dash.dependencies import Output, Input
 from dash.exceptions import PreventUpdate
 import plotly.graph_objects as go
@@ -10,8 +11,8 @@ import pandas as pd
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 
-poverty_data = pd.read_csv('../data/PovStatsData.csv')
-poverty = pd.read_csv('../data/poverty.csv', low_memory=False)
+poverty_data = pd.read_csv('../../data/PovStatsData.csv')
+poverty = pd.read_csv('../../data/poverty.csv', low_memory=False)
 gini = 'GINI index (World Bank estimate)'
 
 regions = ['East Asia & Pacific', 'Europe & Central Asia',
@@ -90,7 +91,7 @@ app.layout = html.Div([
 ])
 
 
-@app.callback(Output('report', 'children'),
+@callback(Output('report', 'children'),
               Input('country', 'value'))
 def display_country_report(country):
     if country is None:
@@ -104,7 +105,7 @@ def display_country_report(country):
             f'The population of {country} in 2010 was {population:,.0f}.']
 
 
-@app.callback(Output('population_chart', 'figure'),
+@callback(Output('population_chart', 'figure'),
               Input('year_dropdown', 'value'))
 def plot_countries_by_population(year):
     fig = go.Figure()
@@ -115,7 +116,7 @@ def plot_countries_by_population(year):
     return fig
 
 
-@app.callback(Output('gini_year_barchart', 'figure'),
+@callback(Output('gini_year_barchart', 'figure'),
               Input('gini_year_dropdown', 'value'))
 def plot_gini_year_barchart(year):
     if not year:
@@ -132,7 +133,7 @@ def plot_gini_year_barchart(year):
     return fig
 
 
-@app.callback(Output('gini_country_barchart', 'figure'), Input('gini_country_dropdown', 'value'))
+@callback(Output('gini_country_barchart', 'figure'), Input('gini_country_dropdown', 'value'))
 def plot_gini_country_barchart(country):
     if not country:
         raise PreventUpdate

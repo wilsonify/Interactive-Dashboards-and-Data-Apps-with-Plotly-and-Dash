@@ -1,7 +1,7 @@
 from urllib.parse import unquote
 
 import dash_bootstrap_components as dbc
-import dash_html_components as html
+from dash import html
 from dash import callback, Output, Input
 from dash.exceptions import PreventUpdate
 from plotly import express as px

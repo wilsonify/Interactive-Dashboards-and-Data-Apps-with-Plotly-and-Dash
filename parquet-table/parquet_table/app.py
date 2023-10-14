@@ -377,7 +377,7 @@ app.layout = html.Div([
 )
 
 
-@app.callback(Output('input_file_path_text_area_output', 'children'),
+@callback(Output('input_file_path_text_area_output', 'children'),
               Input('input_file_path_text_area', 'value'))
 def capture_input_file_path(input_text):
     if input_text is None:
@@ -385,7 +385,7 @@ def capture_input_file_path(input_text):
     return f"{input_text}"
 
 
-@app.callback(
+@callback(
     Output("data_table_output", "children"),
     Input('input_file_path_text_area', 'value'),
 )
@@ -408,7 +408,7 @@ def display_data_table(input_text):
     return dt
 
 
-@app.callback(
+@callback(
     Output("indicator_map_chart", "figure"),
     Output("indicator_map_details_md", "children"),
     Input("indicator_dropdown", "value"),
@@ -467,7 +467,7 @@ def display_generic_map_chart(indicator):
     return fig, markdown
 
 
-@app.callback(
+@callback(
     Output("gini_year_barchart", "figure"), Input("gini_year_dropdown", "value")
 )
 def plot_gini_year_barchart(year):
@@ -488,7 +488,7 @@ def plot_gini_year_barchart(year):
     return fig
 
 
-@app.callback(
+@callback(
     Output("gini_country_barchart", "figure"),
     Input("gini_country_dropdown", "value"),
 )
@@ -510,7 +510,7 @@ def plot_gini_country_barchart(countries):
     return fig
 
 
-@app.callback(
+@callback(
     Output("income_share_country_barchart", "figure"),
     Input("income_share_country_dropdown", "value"),
 )
@@ -537,7 +537,7 @@ def plot_income_share_barchart(country):
     return fig
 
 
-@app.callback(
+@callback(
     Output("perc_pov_scatter_chart", "figure"),
     Input("perc_pov_year_slider", "value"),
     Input("perc_pov_indicator_slider", "value"),
@@ -569,7 +569,7 @@ def plot_perc_pov_chart(year, indicator):
     return fig
 
 
-@app.callback(
+@callback(
     Output("indicator_year_histogram", "figure"),
     Output("table_histogram_output", "children"),
     Input("hist_multi_year_selector", "value"),
