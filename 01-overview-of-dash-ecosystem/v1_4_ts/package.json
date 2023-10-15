@@ -1,16 +1,40 @@
 {
-  "name": "ch05",
-  "version": "1.0.0",
-  "description": "chapter 5",
-  "main": "app.js",
+  "name": "hello_1_4",
+  "version": "0.1.0",
+  "private": true,
   "dependencies": {
-    "typescript": "^4.0.2"
+    "@testing-library/jest-dom": ">=5.17.0",
+    "@testing-library/react": ">=11.2.7",
+    "@testing-library/user-event": ">=12.8.3",
+    "classnames": ">=2.3.2",
+    "eslint": ">=7.32.0",
+    "react": ">=17.0.2",
+    "react-dom": ">=17.0.2",
+    "react-scripts": "^5.0.1",
+    "web-vitals": ">=1.1.2"
   },
-  "devDependencies": {},
   "scripts": {
-    "build": "npx tsc app.ts",
-    "test": "jasmine"
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
   },
-  "author": "",
-  "license": "ISC"
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
 }
