@@ -1,0 +1,16 @@
+{
+  "name": "ch05",
+  "version": "1.0.0",
+  "description": "chapter 5",
+  "main": "app.js",
+  "dependencies": {
+    "typescript": "^4.0.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "build": "npx tsc app.ts",
+    "test": "jasmine"
+  },
+  "author": "",
+  "license": "ISC"
+}
