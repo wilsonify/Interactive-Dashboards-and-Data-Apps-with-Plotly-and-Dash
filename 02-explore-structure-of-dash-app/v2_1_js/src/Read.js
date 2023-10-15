@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
 
-// Import necessary modules
-import pandas from 'pandas-js';
-import { H1 } from 'dash-react';
 
 class Read extends Component {
   constructor(props) {
@@ -12,26 +9,31 @@ class Read extends Component {
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     // Simulate loading data
-    const data = require('../../data/PovStatsData.json'); // Adjust the path as needed
+    try {
+      const response = await fetch('./populationData.json'); // Adjust the path as needed
+      const data = await response.json();
 
-    // Extract unique country names
-    const countryNames = pandas.unique(data['Country Name']);
+      // Extract unique country names
+      const countryNames = Array.from(new Set(data['Country Name']));
 
-    // Create country options
-    const countryOptions = countryNames.map((country) => ({
-      label: country,
-      value: country,
-    }));
+      // Create country options
+      const countryOptions = countryNames.map((country) => ({
+        label: country,
+        value: country,
+      }));
 
-    this.setState({ countryOptions });
+      this.setState({ countryOptions });
+    } catch (error) {
+      console.error('Error loading data:', error);
+    }
   }
 
   render() {
     return (
       <div>
-        <H1>Data Loaded Successfully</H1>
+        <h1>Data Loaded Successfully</h1>
         {/* You can render the country options or other components as needed */}
       </div>
     );

@@ -1,62 +1,68 @@
-import React, { Component } from 'react';
-import { Dropdown, Tabs, Tab, H1, H2, Ul, Li, A } from 'dash-react';
-import countryOptions from './v2_1/read/country_options'; // Import your country options
+import React, { useState, useEffect } from 'react';
+import './index.css';
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      selectedCountry: null,
-      report: null,
+function App() {
+  const [country, setCountry] = useState('');
+  const [population, setPopulation] = useState('');
+
+  useEffect(() => {
+    // Simulate fetching data from an API or other data source
+    // You can replace this with actual data fetching logic
+    const fetchData = async () => {
+      if (country) {
+        const response = await fetch(`./populationData.json`);
+        const data = await response.json();
+        setPopulation(data.population);
+      }
     };
-  }
 
-  handleCountryChange = (selectedCountry) => {
-    // Handle the selected country change here
-    this.setState({ selectedCountry });
-    // You can also fetch and update the report here based on the selected country
+    fetchData();
+  }, [country]);
+
+  const handleCountryChange = (event) => {
+    setCountry(event.target.value);
   };
 
-  render() {
-    return (
-      <div>
-        <H1>Poverty And Equity Database</H1>
-        <H2>The World Bank</H2>
-        <Dropdown
-          id="country"
-          options={countryOptions}
-          value={this.state.selectedCountry}
-          onChange={this.handleCountryChange}
-        />
-        <br />
-        <div id="report">
-          {this.state.report}
-        </div>
-        <br />
-        <Tabs>
-          <Tab label="Key Facts">
-            <Ul>
-              <Li>Number of Economies: 170</Li>
-              <Li>Temporal Coverage: 1974 - 2019</Li>
-              <Li>Update Frequency: Quarterly</Li>
-              <Li>Last Updated: March 18, 2020</Li>
-              <Li>
-                Source: <A href="https://datacatalog.worldbank.org/dataset/poverty-and-equity-database">https://datacatalog.worldbank.org/dataset/poverty-and-equity-database</A>
-              </Li>
-            </Ul>
-          </Tab>
-          <Tab label="Project Info">
-            <Ul>
-              <Li>Book title: Interactive Dashboards and Data Apps with Plotly and Dash</Li>
-              <Li>
-                GitHub repo: <A href="https://github.com/PacktPublishing/Interactive-Dashboards-and-Data-Apps-with-Plotly-and-Dash">https://github.com/PacktPublishing/Interactive-Dashboards-and-Data-Apps-with-Plotly-and-Dash</A>
-              </Li>
-            </Ul>
-          </Tab>
-        </Tabs>
+  return (
+    <div>
+      <h1>Poverty And Equity Database</h1>
+      <h2>The World Bank</h2>
+      <select id="country" name="country" onChange={handleCountryChange}>
+        <option value="">Select a country</option>
+        <option value="Afghanistan">Afghanistan</option>
+        <option value="Albania">Albania</option>
+        <option value="Algeria">Algeria</option>
+        {/* Add more country options here */}
+      </select>
+      <br />
+      <div id="report">
+        {country && (
+          <div>
+            <h3>{country}</h3>
+            <p>{`The population of ${country} in 2010 was ${population.toLocaleString()}.`}</p>
+          </div>
+        )}
       </div>
-    );
-  }
+      <br />
+      <div>
+        <ul>
+          <li>Number of Economies: 170</li>
+          <li>Temporal Coverage: 1974 - 2019</li>
+          <li>Update Frequency: Quarterly</li>
+          <li>Last Updated: March 18, 2020</li>
+          <li>
+            Source: <a href="https://datacatalog.worldbank.org/dataset/poverty-and-equity-database">https://datacatalog.worldbank.org/dataset/poverty-and-equity-database</a>
+          </li>
+        </ul>
+        <ul>
+          <li>Book title: Interactive Dashboards and Data Apps with Plotly and Dash</li>
+          <li>
+            GitHub repo: <a href="https://github.com/PacktPublishing/Interactive-Dashboards-and-Data-Apps-with-Plotly-and-Dash">https://github.com/PacktPublishing/Interactive-Dashboards-and-Data-Apps-with-Plotly-and-Dash</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  );
 }
 
 export default App;
