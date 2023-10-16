@@ -1,0 +1,359 @@
+{
+  "Country Name": [
+    "East Asia & Pacific",
+    "East Asia & Pacific",
+    "East Asia & Pacific",
+    "East Asia & Pacific",
+    "East Asia & Pacific"
+  ],
+  "Country Code": [
+    "EAS",
+    "EAS",
+    "EAS",
+    "EAS",
+    "EAS"
+  ],
+  "Indicator Name": [
+    "Annualized growth in per capita real survey mean consumption or income, bottom 40% (%)",
+    "Annualized growth in per capita real survey mean consumption or income, top 10% (%)",
+    "Annualized growth in per capita real survey mean consumption or income, top 60% (%)",
+    "Annualized growth in per capita real survey mean consumption or income, total population (%)",
+    "Annualized growth in per capita real survey median income or consumption expenditure (%)"
+  ],
+  "Indicator Code": [
+    "SI.SPR.PC40.ZG",
+    "SI.SPR.PT10.ZG",
+    "SI.SPR.PT60.ZG",
+    "SI.SPR.PCAP.ZG",
+    "SI.POV.XPND.MD.ZG"
+  ],
+  "1974": [
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  "1975": [
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  "1976": [
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  "1977": [
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  "1978": [
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  "1979": [
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  "1980": [
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  "1981": [
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  "1982": [
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  "1983": [
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  "1984": [
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  "1985": [
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  "1986": [
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  "1987": [
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  "1988": [
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  "1989": [
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  "1990": [
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  "1991": [
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  "1992": [
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  "1993": [
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  "1994": [
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  "1995": [
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  "1996": [
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  "1997": [
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  "1998": [
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  "1999": [
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  "2000": [
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  "2001": [
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  "2002": [
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  "2003": [
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  "2004": [
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  "2005": [
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  "2006": [
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  "2007": [
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  "2008": [
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  "2009": [
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  "2010": [
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  "2011": [
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  "2012": [
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  "2013": [
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  "2014": [
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  "2015": [
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  "2016": [
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  "2017": [
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  "2018": [
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  "2019": [
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  "Unnamed: 50": [
+    null,
+    null,
+    null,
+    null,
+    null
+  ]
+}

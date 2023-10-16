@@ -51,13 +51,13 @@ function App() {
           <li>Update Frequency: Quarterly</li>
           <li>Last Updated: March 18, 2020</li>
           <li>
-            Source: <a href="https://datacatalog.worldbank.org/dataset/poverty-and-equity-database">https://datacatalog.worldbank.org/dataset/poverty-and-equity-database</a>
+            Source: <a href="https://datacatalog.worldbank.org/dataset/poverty-and-equity-database">worldbank.org</a>
           </li>
         </ul>
         <ul>
           <li>Book title: Interactive Dashboards and Data Apps with Plotly and Dash</li>
           <li>
-            GitHub repo: <a href="https://github.com/PacktPublishing/Interactive-Dashboards-and-Data-Apps-with-Plotly-and-Dash">https://github.com/PacktPublishing/Interactive-Dashboards-and-Data-Apps-with-Plotly-and-Dash</a>
+            GitHub repo: <a href="https://github.com/PacktPublishing/Interactive-Dashboards-and-Data-Apps-with-Plotly-and-Dash">PacktPublishing</a>
           </li>
         </ul>
       </div>
