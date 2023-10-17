@@ -1,23 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import './index.css';
+const computeCountryOptionsUnique = require('./components/CountryOptions');
 
 function App() {
   const [country, setCountry] = useState('');
   const [population, setPopulation] = useState('');
+  const [countryOptions, setCountryOptions] = useState([]);
 
   useEffect(() => {
-    // Simulate fetching data from an API or other data source
-    // You can replace this with actual data fetching logic
-    const fetchData = async () => {
-      if (country) {
-        const response = await fetch(`./populationData.json`);
-        const data = await response.json();
-        setPopulation(data.population);
-      }
-    };
-
-    fetchData();
-  }, [country]);
+    // Fetch data from PovStatsData.json
+    fetch('./PovStatsData.json')
+      .then((response) => response.json())
+      .then((data) => {
+        const options = computeCountryOptionsUnique(data);
+        setCountryOptions(options);
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+      });
+  }, []);
 
   const handleCountryChange = (event) => {
     setCountry(event.target.value);
@@ -29,10 +30,11 @@ function App() {
       <h2>The World Bank</h2>
       <select id="country" name="country" onChange={handleCountryChange}>
         <option value="">Select a country</option>
-        <option value="Afghanistan">Afghanistan</option>
-        <option value="Albania">Albania</option>
-        <option value="Algeria">Algeria</option>
-        {/* Add more country options here */}
+        {countryOptions.map((option) => (
+          <option key={option.key} value={option.value}>
+            {option.label}
+          </option>
+        ))}
       </select>
       <br />
       <div id="report">

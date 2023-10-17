@@ -17,6 +17,7 @@
     "web-vitals": ">=1.1.2"
   },
   "scripts": {
+    "clean": "rm -rf build && rm -rf node_modules",
     "serve": "npx serve -s build",
     "start": "react-scripts start",
     "build": "react-scripts build",
