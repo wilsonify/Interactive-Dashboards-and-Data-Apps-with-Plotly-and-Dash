@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './index.css';
 const computeCountryOptionsUnique = require('./components/CountryOptions');
+const getPopulationForCountry = require('../src/components/getPopulationForCountry');
 
 function App() {
   const [country, setCountry] = useState('');
@@ -14,6 +15,7 @@ function App() {
       .then((data) => {
         const options = computeCountryOptionsUnique(data);
         setCountryOptions(options);
+
       })
       .catch((error) => {
         console.error('Error fetching data:', error);
@@ -22,7 +24,15 @@ function App() {
 
   const handleCountryChange = (event) => {
     setCountry(event.target.value);
-  };
+    fetch('./PovStatsData.json')
+      .then((response) => response.json())
+        .then((data) => {
+          console.log(event.target.value);
+          const selectedPopulation = getPopulationForCountry(data, event.target.value, "2010");
+          console.log("selectedPopulation="+selectedPopulation);
+          setPopulation(selectedPopulation);
+        })
+    };
 
   return (
     <div>
